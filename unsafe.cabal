@@ -1,0 +1,45 @@
+name:                ties341-unsafe
+version:             0.0.0
+synopsis:            Example for the course TIES341
+description:         Unsafe foreign politics!
+license:             GPL-3
+license-file:        LICENSE
+author:              Sampsa Kiiskinen
+maintainer:          tuplanolla@gmail.com
+category:            Education
+build-type:          Simple
+cabal-version:       >=1.10
+
+-- This exhibits a common problem.
+executable truncate
+  main-is:             Truncate.hs
+  build-depends:       base >=4.8 && <5.0,
+                       bytestring >=0.10 && < 1.0
+  default-language:    Haskell2010
+
+-- This demonstrates the perils of lazy unsafeInterleaveIO.
+executable unreliable
+  main-is:             Unreliable.hs
+  other-extensions:    NumDecimals, ScopedTypeVariables
+  build-depends:       base >=4.8 && <5.0
+  default-language:    Haskell2010
+
+-- This demonstrates the usefulness of lazy unsafeInterleaveIO.
+executable lottery
+  main-is:             Lottery.hs
+  build-depends:       base >=4.8 && <5.0,
+                       containers >=0.5 && <1.0,
+                       random >=1.0 && <2.0
+  default-language:    Haskell2010
+
+-- This shows how to use foreign import and unsafePerformIO.
+executable foreign
+  main-is:             Main.hs
+  other-extensions:    ForeignFunctionInterface
+  build-depends:       base >=4.8 && <5.0
+  default-language:    Haskell2010
+  includes:            findroot.h
+  install-includes:    findroot.h
+  c-sources:           findroot.c
+  extra-libraries:     m
+  cc-options:          -O3 -std=c11
