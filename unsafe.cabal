@@ -17,14 +17,14 @@ executable truncate
                        bytestring >=0.10 && < 1.0
   default-language:    Haskell2010
 
--- This demonstrates the perils of lazy unsafeInterleaveIO.
+-- This demonstrates the perils of unsafeInterleaveIO.
 executable unreliable
   main-is:             Unreliable.hs
   other-extensions:    NumDecimals, ScopedTypeVariables
   build-depends:       base >=4.8 && <5.0
   default-language:    Haskell2010
 
--- This demonstrates the usefulness of lazy unsafeInterleaveIO.
+-- This demonstrates the usefulness of unsafeInterleaveIO.
 executable lottery
   main-is:             Lottery.hs
   build-depends:       base >=4.8 && <5.0,
@@ -43,3 +43,11 @@ executable foreign
   c-sources:           findroot.c
   extra-libraries:     m
   cc-options:          -O3 -std=c11
+
+-- This features other flavors of unsafePerformIO.
+executable perform
+  main-is:             Perform.hs
+  build-depends:       base >=4.8 && <5.0,
+                       bytestring >=0.10 && < 1.0,
+                       primitive >=0.6 && <1.0
+  default-language:    Haskell2010
