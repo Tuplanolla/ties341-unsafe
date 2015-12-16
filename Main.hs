@@ -15,24 +15,27 @@ type Endo a = a -> a
 
 foreign import ccall "findroot" c_findroot ::
   FunPtr (Endo CDouble) -> CDouble -> CDouble ->
-  CDouble -> CInt -> Ptr CDouble -> IO CUChar
+  CDouble -> CUInt -> Ptr CDouble -> IO CUChar
 
 foreign import ccall "findroot_d" c_findroot_d ::
   FunPtr (Endo CDouble) -> FunPtr (Endo CDouble) -> CDouble -> CDouble ->
-  CDouble -> CInt -> Ptr CDouble -> IO CUChar
+  CDouble -> CUInt -> Ptr CDouble -> IO CUChar
 
 foreign import ccall "wrapper" c_wrapper ::
   Endo CDouble -> IO (FunPtr (Endo CDouble))
+
+wrap :: Endo Double -> Endo CDouble
+wrap f (CDouble x) = CDouble (f x)
 
 findRoot :: Endo Double -> (Double, Double) -> Double -> Int -> Maybe Double
 findRoot f (a, b) epsilon n =
   unsafePerformIO $
   do fp <- mallocForeignPtr
      withForeignPtr fp $ \ p ->
-       do w <- c_wrapper $ \ (CDouble x) -> CDouble (f x)
+       do w <- c_wrapper $ wrap f
           CUChar b <- c_findroot
             w (CDouble a) (CDouble b)
-            (CDouble epsilon) (CInt (fromIntegral n)) p
+            (CDouble epsilon) (CUInt (fromIntegral n)) p
           freeHaskellFunPtr w
           if b /= 0 then
              do CDouble x <- peek p
@@ -46,12 +49,13 @@ findRoot' f df (a, b) epsilon n =
   unsafePerformIO $
   do fp <- mallocForeignPtr
      withForeignPtr fp $ \ p ->
-       do w <- c_wrapper $ \ (CDouble x) -> CDouble (f x)
-          dw <- c_wrapper $ \ (CDouble x) -> CDouble (df x)
+       do w <- c_wrapper $ wrap f
+          dw <- c_wrapper $ wrap df
           CUChar b <- c_findroot_d
             w dw (CDouble a) (CDouble b)
-            (CDouble epsilon) (CInt (fromIntegral n)) p
+            (CDouble epsilon) (CUInt (fromIntegral n)) p
           freeHaskellFunPtr w
+          freeHaskellFunPtr dw
           if b /= 0 then
              do CDouble x <- peek p
                 return $ Just x else

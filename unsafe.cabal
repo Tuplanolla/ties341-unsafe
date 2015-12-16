@@ -33,7 +33,7 @@ executable lottery
   default-language:    Haskell2010
 
 -- This shows how to use foreign import and unsafePerformIO.
-executable foreign
+executable findroot
   main-is:             Main.hs
   other-extensions:    ForeignFunctionInterface
   build-depends:       base >=4.8 && <5.0
