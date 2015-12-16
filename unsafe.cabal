@@ -18,8 +18,8 @@ executable truncate
   default-language:    Haskell2010
 
 -- This demonstrates the perils of unsafeInterleaveIO.
-executable unreliable
-  main-is:             Unreliable.hs
+executable sandbox
+  main-is:             Sandbox.hs
   other-extensions:    NumDecimals, ScopedTypeVariables
   build-depends:       base >=4.8 && <5.0
   default-language:    Haskell2010
@@ -45,8 +45,8 @@ executable foreign
   cc-options:          -O3 -std=c11
 
 -- This features other flavors of unsafePerformIO.
-executable perform
-  main-is:             Perform.hs
+executable counter
+  main-is:             Counter.hs
   build-depends:       base >=4.8 && <5.0,
                        bytestring >=0.10 && < 1.0,
                        primitive >=0.6 && <1.0
