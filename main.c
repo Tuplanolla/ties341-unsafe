@@ -29,7 +29,7 @@ static double dstrans(double const x) {
   double const dsnafx = dsnaf(x), dsnafy = dsnaf(y);
   double const snafxy = snafx + snafy;
 
-  return (snafx * dsnafy - snafy * dsnafx) / (snafxy * snafxy);
+  return (snafy * dsnafx - snafx * dsnafy) / (snafxy * snafxy);
 }
 
 static double f(double const x) {
